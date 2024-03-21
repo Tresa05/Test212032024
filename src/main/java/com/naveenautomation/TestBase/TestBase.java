@@ -23,11 +23,11 @@ public class TestBase {
 
 	public static WebDriver driver;
 	private static Browsers DEFAULT_BROWSER = Browsers.EDGE;
-	private static Environment DEFAULT_ENV=Environment.PROD;
+	private static Environment DEFAULT_ENV = Environment.PROD;
 	public static Logger logger;
 	private WebDriverEvents events;
 	private EventFiringWebDriver eDriver;
-	
+
 	@BeforeClass
 	public void setUpLogger() {
 		logger = Logger.getLogger(TestBase.class);
@@ -49,6 +49,16 @@ public class TestBase {
 	}
 
 	private void setBrowserForTesting() {
+
+		String browserName = System.getProperty("browser"); // to retrieve in jenkin
+		if (browserName == null) {
+
+			DEFAULT_BROWSER = Browsers.EDGE;
+
+		} else {
+			DEFAULT_BROWSER = Browsers.valueOf(browserName.toUpperCase());
+
+		}
 		switch (DEFAULT_BROWSER) {
 		case CHROME:
 			WebDriverManager.chromedriver().setup();
@@ -67,23 +77,22 @@ public class TestBase {
 			break;
 
 		default:
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Unsupported browser: " +browserName);
 		}
-		
-		//Intialising Event Firing Webdriver
-		eDriver=new EventFiringWebDriver(driver);
-		
-		//Intialising Webdriver Events
-		events=new WebDriverEvents();
-		
-		//Register the event
+
+		// Intialising Event Firing Webdriver
+		eDriver = new EventFiringWebDriver(driver);
+
+		// Intialising Webdriver Events
+		events = new WebDriverEvents();
+
+		// Register the event
 		eDriver.register(events);
-		driver=eDriver;
+		driver = eDriver;
 	}
 
 	public void tearDown() {
 		driver.close();
 	}
-
 
 }

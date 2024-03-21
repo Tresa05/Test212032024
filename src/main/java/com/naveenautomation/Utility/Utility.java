@@ -20,6 +20,7 @@ import com.naveenautomation.TestBase.TestBase;
 
 public class Utility extends TestBase {
 	
+	
 	public static void takeFailedTestScreenShot(String testCaseName) {
 		// Get the current date and Time
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
@@ -71,9 +72,13 @@ public class Utility extends TestBase {
 
 		}
 	}
-	 public static WebElement waitForElementVisibility(WebDriver driver, By locator, int timeoutInSeconds) {
-	        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-	        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-	    }
+	
+	public static WebElement waitForElementToBeVisible(By by, int timeoutinsec) {
+		return (WebElement) new WebDriverWait(driver, timeoutinsec).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+	}
+	 public static void sendText(By by, String text) {
+		 waitForElementToBeVisible(by, 15).sendKeys(text);
+		 
+	 }
 
 }
