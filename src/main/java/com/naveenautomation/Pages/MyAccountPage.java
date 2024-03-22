@@ -8,35 +8,31 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.naveenautomation.TestBase.TestBase;
 
-
-
-
 public class MyAccountPage extends TestBase {
 
 	public MyAccountPage() {
 		PageFactory.initElements(driver, this);
 	}
 
-	
 	@FindBy(css = "#account-account>div.row h2:first-of-type")
 	WebElement myAccountText;
-	
+
 	@FindBy(css = "#column-right a")
 	List<WebElement> sideNavWebelementList;
 
 	@FindBy(css = "div.alert")
 	WebElement NewsLetterSuccessBanner;
-	
+
 	@FindBy(xpath = "//a[text()='Gift Certificates']")
 	WebElement giftCertificateBtn;
-	
+
 	@FindBy(xpath = "//a[text()='Contact Us']")
 	WebElement contactUsBtn;
-	
+
 	public String getMyAccountText() {
 		return myAccountText.getText();
 	}
-	
+
 	public NewsLetterPage clickSideNavMenuItem(String item) {
 		for (int i = 0; i < sideNavWebelementList.size(); i++) {
 			if (sideNavWebelementList.get(i).getText().equalsIgnoreCase(item)) {
@@ -50,7 +46,7 @@ public class MyAccountPage extends TestBase {
 	public String getNewsLetterSuccessAlertText() {
 		return NewsLetterSuccessBanner.getText();
 	}
-	
+
 	public GiftCertificatePage clickGiftCertificatesBtn() {
 		giftCertificateBtn.click();
 		return new GiftCertificatePage();
@@ -60,6 +56,5 @@ public class MyAccountPage extends TestBase {
 		contactUsBtn.click();
 		return new ContactUsPage();
 	}
-
 
 }

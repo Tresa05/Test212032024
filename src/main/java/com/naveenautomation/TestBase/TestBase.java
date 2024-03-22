@@ -56,7 +56,7 @@ public class TestBase {
 			DEFAULT_BROWSER = Browsers.EDGE;
 
 		} else {
-			DEFAULT_BROWSER = Browsers.valueOf(browserName.toUpperCase());
+			DEFAULT_BROWSER = Browsers.valueOf(browserName);
 
 		}
 		switch (DEFAULT_BROWSER) {

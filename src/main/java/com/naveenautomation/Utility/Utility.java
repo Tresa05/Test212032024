@@ -5,15 +5,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.By;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.naveenautomation.TestBase.TestBase;
@@ -73,12 +75,80 @@ public class Utility extends TestBase {
 		}
 	}
 	
-	public static WebElement waitForElementToBeVisible(By by, int timeoutinsec) {
-		return (WebElement) new WebDriverWait(driver, timeoutinsec).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
-	}
-	 public static void sendText(By by, String text) {
-		 waitForElementToBeVisible(by, 15).sendKeys(text);
-		 
-	 }
+	// Explicit waits
+		public static WebElement waitForElementToBeClickable(WebElement element, int timeOutInSeconds) {
+			return new WebDriverWait(driver, timeOutInSeconds).until(ExpectedConditions.elementToBeClickable(element));
+		}
 
-}
+		public static WebElement waitForElementToBeVisible(WebElement element, int timeOutInSeconds) {
+			return new WebDriverWait(driver, timeOutInSeconds).until(ExpectedConditions.visibilityOf(element));
+		}
+
+		public static Boolean waitForElementToBeSelectable(WebElement element, int timeOutInSeconds) {
+			return new WebDriverWait(driver, timeOutInSeconds)
+					.until(ExpectedConditions.elementSelectionStateToBe(element, false));
+		}
+
+		public static Alert waitForAlertToBePresent(int timeOutInSeconds) {
+			return new WebDriverWait(driver, timeOutInSeconds).until(ExpectedConditions.alertIsPresent());
+		}
+
+		// methods to perform actions
+		public static void clickOnElement(WebElement element) {
+			waitForElementToBeClickable(element, 15).click();
+		}
+
+
+		public static void selectFromDropDownUsingVisibleText(WebElement element, String text) {
+			Select sc = new Select(element);
+
+			try {
+				waitForElementToBeClickable(element, 10);
+				sc.selectByVisibleText(text);
+			} catch (Exception e) {
+				sc.selectByValue(text);
+			}
+		}
+		
+		public static void moveToElement(WebElement element) {
+			Actions actions = new Actions(driver);
+			actions.moveToElement(element).build().perform();
+		}
+
+		public void acceptAlert() {
+			if (waitForAlertToBePresent(5) != null) {
+				driver.switchTo().alert().accept();
+			}
+		}
+
+		public void dismissAlert() {
+			if (waitForAlertToBePresent(5) != null) {
+				driver.switchTo().alert().dismiss();
+			}
+		}
+
+		public static void sendText(WebElement element, String text) {
+			waitForElementToBeVisible(element, 10).sendKeys(text);
+
+		}
+
+		public void switchToWindowHandle(WebElement element) {
+			String parentHandle = driver.getWindowHandle();
+			element.click();
+			Set<String> getAllHandles = driver.getWindowHandles();
+			for (String individualHandle : getAllHandles) {
+				if (!individualHandle.equalsIgnoreCase(parentHandle)) {
+					driver.switchTo().window(individualHandle);
+				}
+			}
+		}
+
+		public void switchToFrame(WebElement element) {
+			driver.switchTo().frame(waitForElementToBeVisible(element, 10));
+		}
+
+		public static String getTextFromWebelement(WebElement element) {
+			return waitForElementToBeVisible(element, 30).getText();
+		}
+
+	}

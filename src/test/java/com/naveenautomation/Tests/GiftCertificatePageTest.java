@@ -30,7 +30,7 @@ public class GiftCertificatePageTest  extends TestBase {
 		giftCertificatePage = myAccountPage.clickGiftCertificatesBtn();
         giftCertificatePage.submitGiftCertificate("Jubin", "xyz@yahoo.com", "Tresa", "xyz@hotmail.com",RandomStringUtils.randomAlphabetic(15), "00");
         String giftCertificateSuccessAlertText = giftCertificatePage.getGiftCertificateAlertText();
-		Assert.assertEquals("This   gift certificate will be emailed to the recipient after your order has been paid for.", giftCertificateSuccessAlertText);
+		Assert.assertEquals("This gift certificate will be emailed to the recipient after your order has been paid for.", giftCertificateSuccessAlertText);
 		
 	}
 
